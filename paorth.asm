@@ -1,7 +1,11 @@
+%include 'list.asm'
 %include 'puts.asm'
 %include 'read.asm'
+%include 'dataspace.asm'
+%include 'word.asm' 
+%include 'threadedcode.asm'
 
-global paorth 
+global _start
 
 SECTION .data
 message: db 'hello, world'
@@ -11,9 +15,6 @@ buffer: resb 64
 
 SECTION .text
 
-paorth:
-	.loop
-
-	
-	jmp .loop
-
+_start:
+	mov rax, putexiter
+	jmp docol
