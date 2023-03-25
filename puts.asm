@@ -21,8 +21,13 @@ putchar:
 	pop rdi 
 	ret
 
-cr:
+space:
 	mov rdi, 32
+	call putchar
+	ret
+
+cr:
+	mov rdi, 10
 	call putchar
 	ret
 
