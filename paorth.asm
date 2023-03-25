@@ -1,6 +1,7 @@
 %include 'list.asm'
 %include 'puts.asm'
 %include 'read.asm'
+%include 'stack.asm'
 %include 'dataspace.asm'
 %include 'word.asm' 
 %include 'threadedcode.asm'
