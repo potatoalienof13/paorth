@@ -1,6 +1,4 @@
 
-; rax will be the pointer to which docol should rbxurn
-; rbx will contain the pointer to raxently executing code
 
 %macro next 0
 	mov rax, [rbx] ; rbx is a pointer to the next code to execute
@@ -8,16 +6,6 @@
 	jmp [rax]
 %endmacro
 
-%macro asmword 1
-%1:
-	dq .%1
-	.%1: 
-%endmacro
-
-%macro wordword 1
-%1:
-	dq docol
-%endmacro 
 
 docol:
 	push rbx
@@ -26,21 +14,27 @@ docol:
 	next
 
 section .data
-	stringly db "hiiiiii",0 
+	stringly db "hiiiiii",0Ah, 0
 
-section .text
-asmword wordputs
+asmword wordputs, "puts", 0
 	mov rdi, stringly
 	call puts
 	next
 
-asmword exitword
+asmword quit, "quit", 0
 	mov rdi, 0
 	call exit
 
-wordword putexit
+asmword leaveg, "leave", 0
+	pop rbx 
+	next
+	
+wordword putexit, "putexit", 0
 	dq wordputs
-	dq exitword
+	dq leaveg
 
-wordword putexiter
+
+wordword putexiter, "whargharder", 0
 	dq putexit
+	dq putexit
+	dq quit
