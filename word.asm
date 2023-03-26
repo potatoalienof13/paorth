@@ -1,3 +1,5 @@
+%ifndef word.asm
+%define word.asm
 
 struc wordtype
 	.next: resq 1
@@ -6,23 +8,23 @@ struc wordtype
 	.definition: resq 1
 endstruc
 
+; null so that the last word has a pointer to null
+%define NEXTWORDPTR 0
 
-%define lastdefword 0
-
-%macro header 3 ; name, strname, flags
+%macro wordheader 3 ; name, strname, flags
 	strname_%1: db %2,0
 	align 8
-	global name_%1
+	global name%1
 	link_%1:
-		dq lastdefword
-		%define lastdefword link_%1
-		dq strname_%1
+		dq NEXTWORDPTR
+		%define NEXTWORDPTR link_%1
+		dq strname%1
 		dq %3
 %endmacro
 
 %macro wordword 3 ; name, strname, flags
 	section .data
-	header %1, %2, %3
+	wordheader %1, %2, %3
 		global %1
 		%1:
 			dq docol
@@ -30,10 +32,12 @@ endstruc
 
 %macro asmword 3 ; name, strname, flags
 	section .data
-	header %1, %2, %3
+	wordheader %1, %2, %3
 		global %1
 		%1:
 			dq %%jump
 	section .text
 			%%jump:
 %endmacro
+
+%endif

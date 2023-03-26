@@ -1,3 +1,8 @@
+%ifndef words.asm
+%define words.asm
+
+%include 'puts.asm'
+
 section .data
 	stringly db "hiiiiii",0Ah, 0
 
@@ -23,4 +28,4 @@ wordword _putexiter, "putexiter", 0
 	dq _putexit
 	dq _putexit
 	dq _quit
-
+%endif

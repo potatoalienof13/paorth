@@ -1,4 +1,5 @@
-
+%ifndef list.asm
+%define list.asm
 struc node
 	.next: resq 1
 endstruc
@@ -10,3 +11,4 @@ endstruc
 
 
 
+%endif

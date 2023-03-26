@@ -1,3 +1,6 @@
+%ifndef streq.asm
+%define streq.asm
+
 section .text
 toupper:
 	cmp dil, 'a'
@@ -49,4 +52,4 @@ strieq:
 		ret
 
 
-
+%endif

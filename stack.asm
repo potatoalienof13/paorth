@@ -1,3 +1,5 @@
+%ifndef stack.asm
+%define stack.asm
 section .bss
 stack: resb 1048576 * 8
 
@@ -17,3 +19,4 @@ popstack:
 	ret
 
 
+%endif

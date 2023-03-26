@@ -1,3 +1,5 @@
+%ifndef dataspace.asm
+%define dataspace.asm
 section .bss
 dataspace: resb 1048576 * 8
 
@@ -23,3 +25,4 @@ writedword:
 	mov [dataptr], rdi
 	add dword[dataptr], 8
 	ret
+%endif

@@ -3,7 +3,7 @@
 %include 'read.asm'
 %include 'stack.asm'
 %include 'dataspace.asm'
-%include 'word.asm' 
+%include 'word.asm'
 %include 'threadedcode.asm'
 %include 'words.asm'
 %include 'streq.asm'

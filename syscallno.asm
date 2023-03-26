@@ -1,3 +1,5 @@
+%ifndef syscallno.asm
+%define syscallno.asm
 %define SYS_read 0
 %define SYS_write 1
 %define SYS_open 2
@@ -360,5 +362,4 @@
 %define SYS_process_mrelease 448
 %define SYS_futex_waitv 449
 %define SYS_set_mempolicy_home_node 450
-
-
+%endif

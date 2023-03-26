@@ -1,3 +1,5 @@
+%ifndef puts.asm
+%define puts.asm
 %include "syscallno.asm"
 global exit
 exit:
@@ -55,3 +57,4 @@ strlen:
 	pop rbx
 	mov rax, rdi 
 	ret
+%endif

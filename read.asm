@@ -1,3 +1,5 @@
+%ifndef read.asm
+%define read.asm
 SECTION .text
 
 readin:
@@ -11,3 +13,4 @@ readstdin:
 	mov rdi, 1
 	call readin
 	ret
+%endif
