@@ -1,6 +1,8 @@
 %ifndef word.asm_included
 %define word.asm_included
 
+%include 'rstack.asm'
+
 struc wordtype
 	.next: resq 1
 	.name: resq 1
@@ -40,5 +42,21 @@ endstruc
 	section .text
 			%%jump:
 %endmacro
+
+%macro next 0
+	mov rax, [rbx] ; rbx is a pointer to the next code to execute
+	add rbx, 8
+	jmp [rax]
+%endmacro
+
+asmword _leave, "leave", 0
+	poprstack rbx
+	next
+
+docol:
+	pushrstack rbx
+	add rax, 8
+	mov rbx, rax
+	next
 
 %endif

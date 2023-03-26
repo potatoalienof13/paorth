@@ -2,6 +2,7 @@
 %define words.asm_included
 
 %include 'puts.asm'
+%include 'word.asm'
 
 section .data
 	stringly db "hiiiiii",0Ah, 0

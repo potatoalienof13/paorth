@@ -1,14 +1,5 @@
-%include 'list.asm'
-%include 'puts.asm'
-%include 'read.asm'
-%include 'stack.asm'
-%include 'dataspace.asm'
-%include 'word.asm'
-%include 'threadedcode.asm'
 %include 'words.asm'
-%include 'streq.asm'
 %include 'debug.asm'
-%include 'find.asm'
 
 global _start
 
