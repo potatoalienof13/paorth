@@ -8,15 +8,14 @@ stackptr dq 1
 
 section .text
 
-pushstack:
-	mov [stackptr], rdi
+%macro pushrstack 1
+	mov [stackptr], %1
 	add dword[stackptr], 8
-	ret
+%endmacro 
 
-popstack:
+%macro poprstack 1
 	sub dword[stackptr], 8
-	mov rax, [stackptr]
-	ret
-
+	mov %1, [stackptr]
+%endmacro
 
 %endif

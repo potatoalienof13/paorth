@@ -15,10 +15,6 @@ asmword _quit, "quit", 0
 	mov rdi, 0
 	call exit
 
-asmword _leave, "leave", 0
-	pop rbx 
-	next
-	
 wordword _putexit, "putexit", 0
 	dq _puts
 	dq _leave
