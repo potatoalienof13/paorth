@@ -12,6 +12,8 @@ toupper:
 	mov al, dil
 	ret
 
+
+; NOTE: Both of these set the zero flag if the two strings compare equal.
 streq:
 	.loop:
 		mov al, byte[rsi]
