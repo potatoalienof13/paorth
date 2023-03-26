@@ -6,6 +6,7 @@
 %include 'word.asm' 
 %include 'threadedcode.asm'
 %include 'words.asm'
+%include 'streq.asm'
 
 global _start
 
