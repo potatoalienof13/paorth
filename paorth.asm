@@ -7,6 +7,7 @@
 %include 'threadedcode.asm'
 %include 'words.asm'
 %include 'streq.asm'
+%include 'debug.asm'
 
 global _start
 
