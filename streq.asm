@@ -30,6 +30,7 @@ streq:
 		ret
 
 strieq:
+	push rbx
 	mov rbx, rdi 
 	.loop:
 		mov dil, byte[rbx] ; overwrites rdi, which is why that got moved
@@ -45,9 +46,11 @@ strieq:
 		inc rsi
 		jmp .loop
 	.equal:
+		pop rbx
 		mov rax, 1
 		ret
 	.unequal:
+		pop rbx
 		mov rax, 0 
 		ret
 
