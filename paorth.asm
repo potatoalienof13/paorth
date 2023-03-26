@@ -8,6 +8,7 @@
 %include 'words.asm'
 %include 'streq.asm'
 %include 'debug.asm'
+%include 'find.asm'
 
 global _start
 
