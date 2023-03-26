@@ -12,13 +12,14 @@ endstruc
 %define NEXTWORDPTR 0
 
 %macro wordheader 3 ; name, strname, flags
-	strname_%1: db %2,0
+	; name will usually start with an underscore
+	%%strname: db %2,0
 	align 8
 	global name%1
-	link_%1:
+	link%1:
 		dq NEXTWORDPTR
-		%define NEXTWORDPTR link_%1
-		dq strname%1
+		%define NEXTWORDPTR link%1
+		dq %%strname
 		dq %3
 %endmacro
 
