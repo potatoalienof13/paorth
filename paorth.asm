@@ -5,6 +5,7 @@
 %include 'dataspace.asm'
 %include 'word.asm' 
 %include 'threadedcode.asm'
+%include 'words.asm'
 
 global _start
 
@@ -17,5 +18,5 @@ buffer: resb 64
 SECTION .text
 
 _start:
-	mov rax, putexiter
+	mov rax, _putexiter
 	jmp docol
