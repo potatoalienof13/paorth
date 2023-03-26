@@ -1,5 +1,5 @@
-%ifndef stack.asm
-%define stack.asm
+%ifndef stack.asm_included
+%define stack.asm_included
 section .bss
 stack: resb 1048576 * 8
 

@@ -1,5 +1,5 @@
-%ifndef threadedcode.asm
-%define threadedcode.asm
+%ifndef threadedcode.asm_included
+%define threadedcode.asm_included
 %macro next 0
 	mov rax, [rbx] ; rbx is a pointer to the next code to execute
 	add rbx, 8 

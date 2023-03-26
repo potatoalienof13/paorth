@@ -1,5 +1,5 @@
-%ifndef dataspace.asm
-%define dataspace.asm
+%ifndef dataspace.asm_included
+%define dataspace.asm_included
 section .bss
 dataspace: resb 1048576 * 8
 

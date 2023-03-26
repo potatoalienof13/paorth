@@ -1,5 +1,5 @@
-%ifndef read.asm
-%define read.asm
+%ifndef read.asm_included
+%define read.asm_included
 SECTION .text
 
 readin:

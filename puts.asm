@@ -1,5 +1,5 @@
-%ifndef puts.asm
-%define puts.asm
+%ifndef puts.asm_included
+%define puts.asm_included
 %include "syscallno.asm"
 global exit
 exit:

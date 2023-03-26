@@ -1,5 +1,5 @@
-%ifndef word.asm
-%define word.asm
+%ifndef word.asm_included
+%define word.asm_included
 
 struc wordtype
 	.next: resq 1

@@ -1,5 +1,5 @@
-%ifndef words.asm
-%define words.asm
+%ifndef words.asm_included
+%define words.asm_included
 
 %include 'puts.asm'
 

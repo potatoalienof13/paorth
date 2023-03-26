@@ -1,5 +1,5 @@
-%ifndef streq.asm
-%define streq.asm
+%ifndef streq.asm_included
+%define streq.asm_included
 
 section .text
 toupper:

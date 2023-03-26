@@ -1,5 +1,5 @@
-%ifndef list.asm
-%define list.asm
+%ifndef list.asm_included
+%define list.asm_included
 struc node
 	.next: resq 1
 endstruc
