@@ -10,7 +10,7 @@ readin:
 readstdin:
 	mov rdx, rsi
 	mov rsi, rdi
-	mov rdi, 1
+	mov rdi, 0
 	call readin
 	ret
 %endif
