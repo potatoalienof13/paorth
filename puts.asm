@@ -1,10 +1,6 @@
 %ifndef puts.asm_included
 %define puts.asm_included
 %include "syscallno.asm"
-global exit
-exit:
-	mov rax, SYS_exit
-	syscall
 
 ; string, length
 print:
