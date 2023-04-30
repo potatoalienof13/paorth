@@ -2,6 +2,8 @@
 %define puts.asm_included
 %include "syscallno.asm"
 
+section .text
+
 ; string, length
 print:
 	mov rdx, rsi
@@ -53,4 +55,5 @@ strlen:
 	pop rbx
 	mov rax, rdi 
 	ret
+
 %endif
