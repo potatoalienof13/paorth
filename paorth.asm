@@ -2,6 +2,7 @@
 %include 'debug.asm'
 %include 'readword.asm'
 %include 'exit.asm'
+%include 'integers.asm'
 
 global _start
 
@@ -16,9 +17,35 @@ SECTION .text
 _start:
 	e:
 		nop ; used because of debugging being stupid
-		call readword
-		mov rdi, wordbuffer
-		call puts
-		jmp e
+		mov qword [base], 10
+		mov rdi, 9223372036854775808
+		call putint
+		mov rdi, -13
+		call putint
+		mov rdi, 13
+		call putint
+		mov rdi, 0
+		call putint
+		mov rdi, 1
+		call putint
+		mov rdi, -1
+		call putint
+
+		mov qword [base], 16
+		mov rdi, 9223372036854775808
+		call putint
+		mov rdi, -13
+		call putint
+		mov rdi, 13
+		call putint
+		mov rdi, 0
+		call putint
+		mov rdi, 1
+		call putint
+		mov rdi, -1
+		call putint
+
+
+		call exit
 	;mov rax, _putexiter
 	;jmp docol
