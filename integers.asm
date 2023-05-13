@@ -2,6 +2,7 @@
 %define integers.asm_included
 
 %include 'puts.asm'
+%include 'retzf.asm'
 
 section .data
 base: dq 10
