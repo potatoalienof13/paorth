@@ -59,4 +59,18 @@ docol:
 	mov rbx, rax
 	next
 
+; this "smart" callword returns control to its call site.
+%macro callword 1
+	section .data
+		%%gamer: dq %%jumpback
+	section .text
+	push %%gamer
+	push %1
+	mov rbx, rsp
+	next
+	%%jumpback:
+	pop rax
+	pop rax
+%endmacro 
+
 %endif
