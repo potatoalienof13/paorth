@@ -9,6 +9,7 @@ struc wordtype
 	.flags: resq 1
 	.definition: resq 1
 endstruc
+%define FLAG_IMMEDIATE 1
 
 ; null so that the last word has a pointer to null
 %define NEXTWORDPTR 0
@@ -44,33 +45,37 @@ endstruc
 %endmacro
 
 %macro next 0
-	mov rax, [rbx] ; rbx is a pointer to the next code to execute
+	mov r13, [rbx] ; rbx is a pointer to the next code to execute
 	add rbx, 8
-	jmp [rax]
+	jmp [r13]
 %endmacro
 
 asmword _leave, "leave", 0
 	poprstack rbx
 	next
 
+section .text
 docol:
 	pushrstack rbx
-	add rax, 8
-	mov rbx, rax
+	add r13, 8
+	mov rbx, r13
 	next
 
+
+section .bss
+	callword_word resq 1
+	callword_return resq 1
+section .text
 ; this "smart" callword returns control to its call site.
 %macro callword 1
 	section .data
 		%%gamer: dq %%jumpback
 	section .text
-	push %%gamer
-	push %1
-	mov rbx, rsp
+	mov qword [callword_return], %%gamer
+	mov qword [callword_word], %1
+	mov rbx, callword_word
 	next
 	%%jumpback:
-	pop rax
-	pop rax
 %endmacro 
 
 %endif
