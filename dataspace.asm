@@ -4,13 +4,14 @@ section .bss
 dataspace: resb 1048576 * 8
 
 section .data
-dataptr dq 1
+dataptr dq dataspace
 
 section .text
 
 writebyte:
-	mov [dataptr], dil
-	inc dword[dataptr]
+	mov rax, [dataptr]
+	mov [rax], dil
+	inc qword[dataptr]
 	ret
 
 aligndataptr:
@@ -20,9 +21,10 @@ aligndataptr:
 	add [dataptr], rax
 	ret
 
-writedword:
+writeqword:
 	call aligndataptr
-	mov [dataptr], rdi
-	add dword[dataptr], 8
+	mov rax, [dataptr]
+	mov qword[rax], rdi
+	add qword[dataptr], 8
 	ret
 %endif

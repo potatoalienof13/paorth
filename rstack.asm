@@ -4,18 +4,20 @@ section .bss
 stack: resb 1048576 * 8
 
 section .data
-stackptr dq 1
+stackptr dq stack
 
 section .text
 
 %macro pushrstack 1
-	mov [stackptr], %1
-	add dword[stackptr], 8
+	mov rax, qword[stackptr]
+	mov qword [rax], %1
+	add qword [stackptr], 8
 %endmacro 
 
 %macro poprstack 1
-	sub dword[stackptr], 8
-	mov %1, [stackptr]
+	sub qword[stackptr], 8
+	mov rax, qword[stackptr]
+	mov %1, qword [rax]
 %endmacro
 
 %endif
