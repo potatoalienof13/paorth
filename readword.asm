@@ -54,10 +54,12 @@ key:
 ; puts a word into the word buffer, sets ZF on EOF
 ; needs a newline at the end of the file?
 readword:
+	push r13
+	push rbx
 	mov r13, wordbuffer
 	.loob:
 		call key 
-		retzf ; zf on eof
+		jz .end ; zf on eof
 		mov bl, al
 		mov dil, al
 		call iswhitespace
@@ -66,12 +68,16 @@ readword:
 		mov [r13], bl
 		inc r13 
 		call key
-		retzf
+		jz .end
 		mov bl, al
 		mov dil, al
 		call iswhitespace
 		jnz .newloob
 	mov byte[r13], 0
-	ret
+	cmp r13, 0 ; should unset zf
+	.end:
+		pop rbx
+		pop r13
+		ret
 
 %endif
