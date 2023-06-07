@@ -77,6 +77,10 @@ chartoint:
 ; returns the int
 ; takes a null terminated string as argument
 parseint:
+	push r14
+	push r13
+	push r12
+	
 	mov r13, rdi
 	mov r12, 0
 	mov r14, 1
@@ -99,6 +103,10 @@ parseint:
 		mov rax, r12
 		imul rax, r14
 		test rsp, rsp ; unset zf
-		ret
+		.endfull:
+			pop r12
+			pop r13
+			pop r14
+			ret
 ; todo
 %endif
