@@ -132,13 +132,41 @@ asmword _0branch, "0branch", 0
 		mov rbx, [rbx]
 		next
 
-asmword _immediate, "immediate", FLAG_IMMEDIATE
+
+
+setwordflag:
 	mov rax, [latestdefinedword]
 	add rax, wordtype.flags
-	mov rdi, [rax]
-	or rdi, FLAG_IMMEDIATE
-	mov [rax], rdi
+	mov rsi, [rax]
+	or rsi, rdi
+	mov [rax], rsi
+	ret
+
+unsetwordflag:
+	mov rax, [latestdefinedword]
+	add rax, wordtype.flags
+	mov rsi, [rax]
+	not rdi
+	and rsi, rdi
+	mov [rax], rsi
+	ret
+
+asmword _immediate, "immediate", FLAG_IMMEDIATE
+	mov rdi, FLAG_IMMEDIATE
+	call setwordflag
 	next
+
+asmword _hide, "hide", FLAG_IMMEDIATE
+	mov rdi, FLAG_HIDDEN
+	call setwordflag
+	next
+
+asmword _unhide, "unhide", FLAG_IMMEDIATE
+	next
+
+
+
+section .data
 
 asmword _define, ":", 0
 	.start:
@@ -164,7 +192,7 @@ asmword _define, ":", 0
 	mov rdi, r14
 	call writeqword
 	.flags:
-	mov rdi, 0
+	mov rdi, FLAG_HIDDEN
 	call writeqword
 	.definition:
 	mov rdi, docol
@@ -179,6 +207,8 @@ asmword _fin, ";", FLAG_IMMEDIATE
 	mov byte [compileflag], 0
 	mov rdi, _leave
 	call writeqword
+	mov rdi, FLAG_HIDDEN
+	call unsetwordflag
 	next
 
 asmword _latest, "latest", 0
@@ -195,6 +225,10 @@ asmword _literal, "literal", 0
 	pushstack rax
 	add rbx, 8
 	next
+
+asmword _error, "error", 0
+	call error
+	; no next, error doesnt return contol flow here
 
 section .data
 

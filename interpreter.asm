@@ -6,6 +6,7 @@
 %include 'integers.asm'
 %include 'find.asm'
 %include 'compileflag.asm'
+%include 'error.asm'
 
 section .data
 	wordnotfound: db "Word not found!",0
@@ -54,7 +55,7 @@ interpret:
 		.notfound:
 			mov rdi, wordnotfound
 			call puts
-			call exit
+			call error
 	.end:
 		pop r13
 		pop rbx

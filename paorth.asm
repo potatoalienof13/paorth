@@ -7,16 +7,13 @@
 
 global _start
 
-SECTION .data
-message: db 'hello, world', 0
-fail: db 'Failed lol', 0
+section .bss
+; in the event an error occurs, this restores the stack ptr to the time before anything could have gone wrong
+programstackptrsave: resq 1
 
-SECTION .bss
-buffer: resb 64
-
-
-SECTION .text
+section .text
 _start:
 	nop
+	mov [programstackptrsave], rsp
 	call interpret
 	call exit
