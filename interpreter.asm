@@ -30,7 +30,7 @@ interpret:
 		jz .notfound
 		cmp r13, 0
 		jnz .compileliteral
-		push rbx
+		pushstack rbx
 		jmp .inloop
 		.compileliteral:
 			mov rdi, _literal

@@ -10,7 +10,7 @@
 
 section .text 
 asmword _puts, "puts", 0
-	pop rdi
+	popstack rdi
 	call puts
 	next
 
@@ -19,8 +19,125 @@ asmword _quit, "quit", 0
 	call exit
 
 asmword _dot, ".", 0
-	pop rdi
+	popstack rdi
 	call putint
+	next
+
+asmword _add, "+", 0
+	popstack rdi
+	popstack rax
+	add rax, rdi
+	pushstack rax
+	next
+
+asmword _sub, "-", 0
+	popstack rdi
+	popstack rax
+	sub rax, rdi
+	pushstack rax
+	next
+
+asmword _mul, "*", 0
+	popstack rdi
+	popstack rax
+	imul rax, rdi
+	pushstack rax
+	next
+
+asmword _div, "/", 0
+	popstack rdi
+	popstack rax
+	cqo ; sign extends rax into rdx 
+	idiv rdi
+	pushstack rax
+	next
+
+asmword _eq, "=", 0
+	popstack rdi
+	popstack rax
+	mov rsi, 1
+	cmp rdi, rax
+	je .equal
+	mov rax, 0
+	.equal:
+		pushstack rsi
+		next
+
+asmword _drop, "drop", 0
+	popstack rax
+	next
+
+asmword _dup, "dup", 0
+	popstack rax
+	pushstack rax
+	pushstack rax
+	next
+
+asmword _swap, "swap", 0
+	popstack rax
+	popstack rdi
+	pushstack rax
+	pushstack rdi
+	next
+
+asmword _torstack, ">r", 0
+	popstack rax
+	pushrstack rax
+	next
+
+asmword _fromrstack, "r>", 0
+	pushrstack rax
+	popstack rax
+	next
+
+asmword _here, "here", 0
+	mov rax, [dataptr]
+	pushstack rax
+	next
+
+asmword _write, ",", 0
+	popstack rdi
+	call writeqword
+	next
+
+asmword _writechar, ",c", 0
+	popstack rdi
+	call writebyte
+	next
+	
+asmword _at, "@", 0
+	popstack rdi
+	mov rax, [rdi]
+	pushstack rax
+	next
+
+asmword _shove, "!", 0
+	popstack rdi
+	popstack rax
+	mov [rdi], rax
+	next
+
+; jumps forward, or backward, 
+asmword _branch, "branch", 0
+	mov rbx, [rbx]
+	next
+
+asmword _0branch, "0branch", 0
+	popstack rax
+	cmp rax, 0
+	je .jump
+	add rbx, 8
+	next
+	.jump:
+		mov rbx, [rbx]
+		next
+
+asmword _immediate, "immediate", FLAG_IMMEDIATE
+	mov rax, [latestdefinedword]
+	add rax, wordtype.flags
+	mov rdi, [rax]
+	or rdi, FLAG_IMMEDIATE
+	mov [rax], rdi
 	next
 
 asmword _define, ":", 0
@@ -64,12 +181,18 @@ asmword _fin, ";", FLAG_IMMEDIATE
 	call writeqword
 	next
 
+asmword _latest, "latest", 0
+	mov rax, [latestdefinedword] 
+	pushstack rax
+	next
+
 ; literal isnt a normal word
 ; its job is to handle integer literals
 ; In memory, the integer is the 64 bits after the pointer to literal
 ; It wont ever be directly included in a definition for a word
-asmword _literal, "LITERAL", 0
-	push qword [rbx]
+asmword _literal, "literal", 0
+	mov rax, [rbx]
+	pushstack rax
 	add rbx, 8
 	next
 
