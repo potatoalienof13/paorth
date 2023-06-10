@@ -10,6 +10,7 @@ struc wordtype
 	.definition: resq 1
 endstruc
 %define FLAG_IMMEDIATE 1
+%define FLAG_HIDDEN 2
 
 ; null so that the last word has a pointer to null
 %define NEXTWORDPTR 0
@@ -39,9 +40,9 @@ endstruc
 	wordheader %1, %2, %3
 		global %1
 		%1:
-			dq %%jump
+			dq asm%1
 	section .text
-			%%jump:
+			asm%1:
 %endmacro
 
 %macro next 0
