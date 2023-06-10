@@ -3,9 +3,9 @@
 
 %include 'puts.asm'
 %include 'retzf.asm'
+%include 'vars.asm'
 
 section .data
-base: dq 10
 baselookup: db "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 section .text
@@ -93,7 +93,7 @@ parseint:
 		mov dil, byte[r13]
 		; note that this stops empty strings.
 		call chartoint
-		retzf
+		jz .endfull
 		add r12, rax
 		inc r13
 		cmp byte[r13], 0
