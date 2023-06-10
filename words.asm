@@ -132,8 +132,6 @@ asmword _0branch, "0branch", 0
 		mov rbx, [rbx]
 		next
 
-
-
 setwordflag:
 	mov rax, [latestdefinedword]
 	add rax, wordtype.flags
@@ -162,11 +160,10 @@ asmword _hide, "hide", FLAG_IMMEDIATE
 	next
 
 asmword _unhide, "unhide", FLAG_IMMEDIATE
+	mov rdi, FLAG_HIDDEN
+	call unsetwordflag
 	next
 
-
-
-section .data
 
 asmword _define, ":", 0
 	.start:
