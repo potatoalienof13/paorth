@@ -20,10 +20,14 @@ find:
 	.loop:
 		cmp rbx, 0
 		je .wordnotfound
+		mov rdi, [rbx + wordtype.flags]
+		test rdi, FLAG_HIDDEN
+		jnz .nextloop
 		mov rdi, [rbx + wordtype.name]
 		mov rsi, r13
 		call strieq
 		je .wordfound
+	.nextloop:
 		mov rbx, [rbx + wordtype.next]
 		jmp .loop
 	.wordnotfound:
