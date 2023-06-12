@@ -1,0 +1,18 @@
+: 0= 0 = ; 
+: begin immediate here @ ; 
+: until immediate ' 0= , ' 0branch , , ;
+: '\n' 10 ;
+: char immediate word c@ ; 
+: comment begin dup key  = 0= until drop ; 
+: \ immediate '\n' comment ; 
+\ Comments are now implemented!
+\ The next type of comments are trickier 
+: literal immediate ' lit , , ; 
+: ( immediate char ) literal comment ;
+( More comments ! ) 
+\ control flow in paorth works by compiling 0branch, with an offset to jump to.
+\ if compiles a dummy address, and pushes the address of that address to the stack
+: if immediate ' 0branch , here @ 255 , ;
+\ the address gets overwritten by then
+: then immediate here @ swap ! ;
+ 
