@@ -7,8 +7,26 @@
 %include 'compileflag.asm'
 %include 'readword.asm'
 %include 'dataspace.asm'
+%include 'error.asm'
 
-section .text 
+section .text
+
+; pushes a number to the stack in interpretation mode
+; compiles it in immediate mode
+literalhelper:
+	cmp byte [compileflag], 0
+	jne .comp
+	pushstack rdi
+	ret
+	
+	.comp:
+		push rdi
+		mov rdi, _lit
+		call writeqword
+		pop rdi
+		call writeqword
+		ret
+
 asmword _puts, "puts", 0
 	popstack rdi
 	call puts
@@ -58,7 +76,7 @@ asmword _eq, "=", 0
 	mov rsi, 1
 	cmp rdi, rax
 	je .equal
-	mov rax, 0
+	mov rsi, 0
 	.equal:
 		pushstack rsi
 		next
@@ -90,11 +108,6 @@ asmword _fromrstack, "r>", 0
 	popstack rax
 	next
 
-asmword _here, "here", 0
-	mov rax, [dataptr]
-	pushstack rax
-	next
-
 asmword _write, ",", 0
 	popstack rdi
 	call writeqword
@@ -105,16 +118,28 @@ asmword _writechar, ",c", 0
 	call writebyte
 	next
 	
-asmword _at, "@", 0
+asmword _get, "@", 0
 	popstack rdi
 	mov rax, [rdi]
 	pushstack rax
 	next
 
-asmword _shove, "!", 0
+asmword _set, "!", 0
 	popstack rdi
 	popstack rax
 	mov [rdi], rax
+	next
+
+asmword _getb, "C@", 0
+	popstack rdi
+	mov al, byte [rdi]
+	pushstack rax
+	next
+
+asmword _setb, "C!", 0
+	popstack rdi
+	popstack rax
+	mov byte [rdi], al
 	next
 
 ; jumps forward, or backward, 
@@ -131,6 +156,11 @@ asmword _0branch, "0branch", 0
 	.jump:
 		mov rbx, [rbx]
 		next
+
+asmword _key, "key", 0
+	call key
+	pushstack rax
+	next
 
 setwordflag:
 	mov rax, [latestdefinedword]
@@ -164,21 +194,30 @@ asmword _unhide, "unhide", FLAG_IMMEDIATE
 	call unsetwordflag
 	next
 
+movestringtodataspace:
+	push rbx
+	mov rbx, rdi
+	.loop:
+		mov dil, byte [rbx]
+		call writebyte
+		inc rbx
+		cmp byte [rbx-1], 0
+		jne .loop
+	.end:
+	pop rbx
+	ret 
 
-asmword _define, ":", 0
-	.start:
-	push r13
-	push r14
+asmword _persiststring, "persiststring", 0
+	popstack rdi
+	call movestringtodataspace
+	next
+
+asmword _create, "create", FLAG_IMMEDIATE
 	call readword
-	mov r13, wordbuffer
-	mov r14, [dataptr]
-	.writenameloop:
-	mov dil, byte[r13]
-	call writebyte
-	cmp byte [r13], 0
-	je .next
-	inc r13
-	jmp .writenameloop
+	.writename:
+	push qword [dataptr]
+	mov rdi, wordbuffer
+	call movestringtodataspace
 	.next:
 	call aligndataptr
 	mov rsi, [dataptr]
@@ -186,22 +225,18 @@ asmword _define, ":", 0
 	call writeqword
 	mov [latestdefinedword], rsi
 	.name:
-	mov rdi, r14
+	pop rdi
 	call writeqword
 	.flags:
 	mov rdi, FLAG_HIDDEN
 	call writeqword
-	.definition:
-	mov rdi, docol
-	call writeqword
-
-	mov qword [compileflag], 1
-	pop r14
-	pop r13
 	next
 
 asmword _fin, ";", FLAG_IMMEDIATE
-	mov byte [compileflag], 0
+	cmp byte [compileflag], 0 ; if not in compile mode, error
+	jnz .allfine
+	errorm "';' was used in interpretation mode."
+	.allfine: mov byte [compileflag], 0
 	mov rdi, _leave
 	call writeqword
 	mov rdi, FLAG_HIDDEN
@@ -217,11 +252,54 @@ asmword _latest, "latest", 0
 ; its job is to handle integer literals
 ; In memory, the integer is the 64 bits after the pointer to literal
 ; It wont ever be directly included in a definition for a word
-asmword _literal, "literal", 0
+asmword _lit, "lit", 0
 	mov rax, [rbx]
 	pushstack rax
 	add rbx, 8
 	next
+
+asmword _getxt, "'", FLAG_IMMEDIATE
+	call readword
+	jz .error
+	mov rdi, wordbuffer
+	call find
+	cmp rax, 0
+	je error
+	add rax, wordtype.definition
+	mov rdi, rax
+	call literalhelper
+	next
+	.error: ; eof. I should handle this better
+		call exit 
+
+; note, wordbuffer gets invalidated with the next call to word
+asmword _word, "word", 0
+	call readword
+	pushstack wordbuffer
+	next
+	
+asmword _compile, "[COMPILE]", FLAG_IMMEDIATE
+	call asm_getxt
+	popstack rdi
+	call writeqword
+	next
+
+asmword _startinterp, "[", FLAG_IMMEDIATE
+	mov byte [compileflag], 0
+	next
+
+asmword _endinterp, "]", FLAG_IMMEDIATE
+	mov byte [compileflag], 1
+	next
+
+asmword _break, "break", 0
+	nop
+	next
+
+asmword _breaki, "breaki", FLAG_IMMEDIATE
+	nop
+	next
+
 
 asmword _error, "error", 0
 	call error
@@ -229,12 +307,21 @@ asmword _error, "error", 0
 
 section .data
 
+wordword _define, ":", FLAG_IMMEDIATE
+	dq _create
+	dq _lit
+	dq docol
+	dq _write
+	dq _hide
+	dq _endinterp
+	dq _leave
+
 wordword _putexit, "putexit", 0
 	dq _puts
 	dq _leave
 	
 wordword _test, "test", 0
-	dq _literal
+	dq _lit
 	dq 9321
 	dq _dot
 	dq _leave

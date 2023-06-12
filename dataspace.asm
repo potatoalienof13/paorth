@@ -1,10 +1,9 @@
 %ifndef dataspace.asm_included
 %define dataspace.asm_included
+%include 'vars.asm'
+
 section .bss
 dataspace: resb 1048576 * 8
-
-section .data
-dataptr dq dataspace
 
 section .text
 

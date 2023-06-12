@@ -34,7 +34,7 @@ interpret:
 		pushstack rbx
 		jmp .inloop
 		.compileliteral:
-			mov rdi, _literal
+			mov rdi, _lit
 			call writeqword 
 			mov rdi, rbx
 			call writeqword

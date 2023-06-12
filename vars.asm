@@ -9,11 +9,13 @@ section .data
 	align 8
 	%1:  dq %2
 	wordword _%1, %3, 0
-		dq _literal
+		dq _lit
 		dq %1
 		dq _leave
 %endmacro
 
 varword base, 10, "base"
+varword dataptr, dataspace, "here"
+
 
 %endif

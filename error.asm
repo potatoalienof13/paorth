@@ -3,6 +3,14 @@
 
 %include 'rstack.asm'
 
+%macro errorm 1
+	section .data
+		%%errormsg: db %1,0
+	section .text
+	mov rdi, %%errormsg
+	call puts
+	call error
+%endmacro 
 
 section .data
 errormsg: db "Error occured, resetting stacks",0
