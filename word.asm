@@ -7,7 +7,7 @@ struc wordtype
 	.next: resq 1
 	.name: resq 1
 	.flags: resq 1
-	.definition: resq 1
+	.xt: resq 1
 endstruc
 %define FLAG_IMMEDIATE 1
 %define FLAG_HIDDEN 2

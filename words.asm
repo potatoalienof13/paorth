@@ -265,7 +265,7 @@ asmword _getxt, "'", FLAG_IMMEDIATE
 	call find
 	cmp rax, 0
 	je error
-	add rax, wordtype.definition
+	add rax, wordtype.xt
 	mov rdi, rax
 	call literalhelper
 	next

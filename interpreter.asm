@@ -44,11 +44,11 @@ interpret:
 			je .run
 			test qword [rax + wordtype.flags], FLAG_IMMEDIATE
 			jnz .run
-			lea rdi, [rax + wordtype.definition]
+			lea rdi, [rax + wordtype.xt]
 			call writeqword
 			jmp .inloop
 		.run:
-			add rax, wordtype.definition
+			add rax, wordtype.xt
 			callword rax
 			mov r13, qword [compileflag] ; word might have changed it
 			jmp .inloop
