@@ -233,7 +233,7 @@ asmword _persiststring, "persiststring", 0
 	call movestringtodataspace
 	next
 
-asmword _create, "create", FLAG_IMMEDIATE
+asmword _create, "create", 0
 	call readword
 	.writename:
 	push qword [dataptr]
@@ -321,6 +321,10 @@ asmword _breaki, "breaki", FLAG_IMMEDIATE
 	nop
 	next
 
+asmword _does, "docol", 0
+	mov rax, docol
+	pushstack rax
+	next
 
 asmword _error, "error", 0
 	call error
