@@ -11,6 +11,7 @@ struc wordtype
 endstruc
 %define FLAG_IMMEDIATE 1
 %define FLAG_HIDDEN 2
+%define FLAG_LOCAL 4
 
 ; null so that the last word has a pointer to null
 %define NEXTWORDPTR 0
