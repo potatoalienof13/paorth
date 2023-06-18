@@ -70,6 +70,27 @@ asmword _div, "/", 0
 	pushstack rax
 	next
 
+asmword _and, "and", 0
+	popstack rdi
+	popstack rax
+	and rax, rdi
+	pushstack rax
+	next
+
+asmword _or, "or", 0
+	popstack rdi
+	popstack rax
+	or rax, rdi
+	pushstack rax
+	next
+
+asmword _xor, "xor", 0
+	popstack rdi
+	popstack rax
+	xor rax, rdi
+	pushstack rax
+	next
+
 asmword _eq, "=", 0
 	popstack rdi
 	popstack rax
