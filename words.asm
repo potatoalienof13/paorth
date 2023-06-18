@@ -279,6 +279,16 @@ asmword _lit, "lit", 0
 	add rbx, 8
 	next
 
+asmword _find, "find", 0
+	call readword
+	jz .error
+	mov rdi, wordbuffer
+	call find
+	pushstack rax
+	next
+	.error:
+		call exit
+
 asmword _getxt, "'", FLAG_IMMEDIATE
 	call readword
 	jz .error
