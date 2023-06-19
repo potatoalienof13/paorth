@@ -200,19 +200,20 @@ unsetwordflag:
 	mov [rax], rsi
 	ret
 
-asmword _immediate, "immediate", FLAG_IMMEDIATE
-	mov rdi, FLAG_IMMEDIATE
-	call setwordflag
-	next
 
-asmword _hide, "hide", FLAG_IMMEDIATE
+asmword _hide, "hide", 0 ; necesary for create
 	mov rdi, FLAG_HIDDEN
 	call setwordflag
 	next
 
-asmword _unhide, "unhide", FLAG_IMMEDIATE
-	mov rdi, FLAG_HIDDEN
+asmword _unsetwordflag, "unsetflag", 0
+	popstack rdi
 	call unsetwordflag
+	next
+
+asmword _setwordflag, "setflag", 0
+	popstack rdi
+	call setwordflag
 	next
 
 movestringtodataspace:
