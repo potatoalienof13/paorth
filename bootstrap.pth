@@ -1,4 +1,8 @@
-: 0= 0 = ; 
+: flag_local 4 ;
+: flag_hidden 2 ;
+: flag_immediate 1 ;
+: immediate flag_immediate setflag ; immediate 
+: 0= 0 = ;
 : begin immediate here @ ; 
 : until immediate ' 0= , ' 0branch , , ;
 : '\n' 10 ;
@@ -9,10 +13,57 @@
 \ The next type of comments are trickier 
 : literal immediate ' lit , , ; 
 : ( immediate char ) literal comment ;
-( More comments ! ) 
+( More comments ! )
+ 
 \ control flow in paorth works by compiling 0branch, with an offset to jump to.
 \ if compiles a dummy address, and pushes the address of that address to the stack
 : if immediate ' 0branch , here @ 255 , ;
 \ the address gets overwritten by then
 : then immediate here @ swap ! ;
- 
+\ else!!!!!
+\ takes an address that needs to be overwritten
+: else immediate 
+	' branch , here @ 255 , swap \ branch over second block, push address needing overwritten to stack
+	here @ swap ! ;
+
+: xttodef 24 - ;
+: deftoname 8 + ;
+: deftoflags 16 + ; 
+: deftoxt 24 + ;
+: unhide flag_hidden unsetflag ; 
+: variable immediate here @ 0 , create unhide docol , ' lit , ( here @ ) , ' leave , ;
+: constant immediate create unhide docol , ' lit , , ' leave , ;
+: value immediate create unhide docol , ' lit , 0 , ' leave , ;
+: localdeftovalue 40 + ; 
+
+: read-string
+	begin \ read until "
+		key 34 = 0= 
+	until
+	here @
+	begin \ read and write until " again
+		key dup 34 = 
+		if
+			\ exit
+			drop
+			0  
+		else
+			\ write
+			,c
+			1
+		then
+	until
+	0 ,c
+;
+
+: printstringconstant immediate
+	' branch , here @ 256 ,
+	read-string swap 
+	align
+	here @ swap ! 
+	' lit , ,
+	' puts , ;
+
+: recurse immediate 
+	latest toxt , ;
+

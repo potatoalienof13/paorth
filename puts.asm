@@ -42,6 +42,16 @@ puts:
 	pop rbx
 	ret
 
+putsnonl:
+	push rbx 
+	mov rbx, rdi
+	call strlen
+	mov rdi, rbx
+	mov rsi, rax 
+	call print
+	pop rbx
+	ret
+
 strlen:
 	push rbx
 	mov rbx, rdi

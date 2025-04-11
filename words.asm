@@ -134,6 +134,10 @@ asmword _write, ",", 0
 	call writeqword
 	next
 
+asmword _align, "align", 0
+	call aligndataptr
+	next
+
 asmword _writechar, ",c", 0
 	popstack rdi
 	call writebyte
@@ -296,7 +300,7 @@ asmword _getxt, "'", FLAG_IMMEDIATE
 	mov rdi, wordbuffer
 	call find
 	cmp rax, 0
-	je error
+	je .error
 	add rax, wordtype.xt
 	mov rdi, rax
 	call literalhelper
@@ -309,7 +313,13 @@ asmword _word, "word", 0
 	call readword
 	pushstack wordbuffer
 	next
-	
+
+asmword _toxt, "toxt", 0
+	popstack rdi
+	add rdi, wordtype.xt
+	pushstack rdi
+	next
+
 asmword _compile, "[COMPILE]", FLAG_IMMEDIATE
 	call asm_getxt
 	popstack rdi
@@ -338,9 +348,16 @@ asmword _does, "docol", 0
 	next
 
 asmword _error, "error", 0
-	call error
+	errorm "Code called error"
 	; no next, error doesnt return contol flow here
 
+asmword _emit, "emit", 0
+	popstack rdi
+	call putchar
+	next
+
+asmword _sq_char_sq, "[CHAR]", 0
+	
 section .data
 
 wordword _define, ":", FLAG_IMMEDIATE
@@ -356,10 +373,4 @@ wordword _putexit, "putexit", 0
 	dq _puts
 	dq _leave
 	
-wordword _test, "test", 0
-	dq _lit
-	dq 9321
-	dq _dot
-	dq _leave
-
 %endif

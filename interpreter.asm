@@ -9,7 +9,7 @@
 %include 'error.asm'
 
 section .data
-	wordnotfound: db "Word not found!",0
+	wordnotfound: db "Word not found:",0
 	
 section .text
 ; reads in input, and runs the code
@@ -54,7 +54,10 @@ interpret:
 			jmp .inloop
 		.notfound:
 			mov rdi, wordnotfound
-			call puts
+			call putsnonl
+			mov rdi, wordbuffer
+			call putsnonl
+			call printerrorline
 			call error
 	.end:
 		pop r13

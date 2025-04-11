@@ -42,7 +42,7 @@ putint:
 	mov byte[rsp], '-'
 	.skipminus:
 	mov rdi, rsp
-	call puts
+	call putsnonl
 	mov rsp, rbp
 	pop rbp 
 	ret

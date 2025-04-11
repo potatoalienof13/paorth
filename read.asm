@@ -2,6 +2,13 @@
 %define read.asm_included
 SECTION .text
 
+openr:
+	mov rax, SYS_open
+	; O_RDONLY
+	mov rsi, 0
+	syscall
+	ret
+
 readin:
 	mov rax, SYS_read 
 	syscall

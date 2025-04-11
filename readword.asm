@@ -17,7 +17,7 @@ wordbuffer: resb wordbuffersize
 section .data
 keybuffernext: dq keybuffer
 keybuffertop: dq keybuffer
-
+linenumber: dq 1
 
 section .text
 ; puts new data in the key buffer
@@ -48,6 +48,10 @@ key:
 	mov rdi, [keybuffernext]
 	xor rax, rax
 	mov al, byte[rdi]
+	cmp al, 10 ; new line
+	jne .skipadd
+	inc qword [linenumber]
+	.skipadd:
 	add qword [keybuffernext], 1
 	ret
 
@@ -79,5 +83,7 @@ readword:
 		pop rbx
 		pop r13
 		ret
+
+
 
 %endif

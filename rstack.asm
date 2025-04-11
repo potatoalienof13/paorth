@@ -2,7 +2,7 @@
 %define stack.asm_included
 
 %include 'rstack.asm'
-
+%include 'error.asm'
 
 section .bss
 returnstack: resb 1048576 * 8
@@ -17,9 +17,7 @@ stackundererrormsg: db "Stack underflowed!",0
 section .text
 
 returnstackunderflowerror:
-	mov rdi, returnstackundererrormsg
-	call puts
-	call error
+	errorm "Return stack underflowed"
 
 ; WARNING: pushrstack and pushstack overwrite r11
 %macro pushrstack 1
@@ -37,9 +35,7 @@ returnstackunderflowerror:
 %endmacro
 
 stackunderflowerror:
-	mov rdi, stackundererrormsg
-	call puts
-	call error
+	errorm "Stack underflowed."
 
 ; WARNING: pushrstack and pushstack overwrite r11
 %macro pushstack 1
